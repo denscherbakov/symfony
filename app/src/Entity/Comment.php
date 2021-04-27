@@ -10,6 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Comment
 {
+	private const PUBLISHED = 1;
+
+	private const NOT_PUBLISHED = 0;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -37,6 +41,11 @@ class Comment
      * @ORM\Column(type="datetime")
      */
     private $updated_at;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_published;
 
     public function getId(): ?int
     {
@@ -90,4 +99,19 @@ class Comment
 
         return $this;
     }
+
+    public function getIsPublished(): ?bool
+    {
+        return $this->is_published;
+    }
+
+	public function setIsPublished(): self
+	{
+		$this->is_published = self::PUBLISHED;
+	}
+
+	public function setIsNotPublished(): self
+	{
+		$this->is_published = self::NOT_PUBLISHED;
+	}
 }

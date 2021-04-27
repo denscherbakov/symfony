@@ -4,12 +4,17 @@ namespace App\Entity;
 
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  */
 class Post
 {
+	private const PUBLISHED = 1;
+
+	private const NOT_PUBLISHED = 0;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -100,6 +105,11 @@ class Post
         return $this;
     }
 
+	public function setCreatedAtValue()
+	{
+		$this->created_at = new \DateTime();
+	}
+
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updated_at;
@@ -112,15 +122,23 @@ class Post
         return $this;
     }
 
+	public function setUpdatedAtValue()
+	{
+		$this->updated_at = new \DateTime();
+	}
+
     public function getIsPublished(): ?bool
     {
         return $this->is_published;
     }
 
-    public function setIsPublished(bool $is_published): self
+    public function setIsPublished(): self
     {
-        $this->is_published = $is_published;
-
-        return $this;
+        $this->is_published = self::PUBLISHED;
     }
+
+	public function setIsNotPublished(): self
+	{
+		$this->is_published = self::NOT_PUBLISHED;
+	}
 }
