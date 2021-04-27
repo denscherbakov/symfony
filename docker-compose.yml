@@ -1,6 +1,17 @@
 version: '3.0'
 
 services:
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+    volumes:
+    - ./app:/symfony
+    container_name: ${PROJECT_NAME}-php-fpm
+    environment:
+      XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1"
+      PHP_IDE_CONFIG: "serverName=Docker"
+    networks:
+    - internal
   nginx:
     build:
       context: ./docker/nginx
@@ -10,16 +21,10 @@ services:
     restart: always
     ports:
     - "8081:80"
-
-  php-fpm:
-    build:
-      context: ./docker/php-fpm
-    volumes:
-    - ./app:/symfony
-    container_name: ${PROJECT_NAME}-php-fpm
     depends_on:
-    - mysql
-
+    - php-fpm
+    networks:
+    - internal
   php-cli:
     build:
       context: ./docker/php-cli
@@ -27,9 +32,10 @@ services:
     - ./app:/symfony
     command: sleep 10000
     container_name: ${PROJECT_NAME}-php-cli
-
   mysql:
     image: mysql:8.0
+    ports:
+      - 3306:3306
     command: --default-authentication-plugin=mysql_native_password
     volumes:
     - mysql:/var/lib/mysql
@@ -40,6 +46,12 @@ services:
     - "MYSQL_DATABASE=${MYSQL_DATABASE}"
     - "MYSQL_USER=${MYSQL_USER}"
     - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
-
 volumes:
   mysql:
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.220.0/28
