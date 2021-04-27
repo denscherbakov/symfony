@@ -135,6 +135,8 @@ class Post
     public function setIsPublished(): self
     {
         $this->is_published = self::PUBLISHED;
+
+        return $this;
     }
 
 	public function setIsNotPublished(): self

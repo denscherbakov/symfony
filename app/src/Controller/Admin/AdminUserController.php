@@ -16,7 +16,7 @@ class AdminUserController extends AdminBaseController
     /**
      * @Route("/admin/users", name="admin/users_list")
      */
-    public function index()
+    public function index(): Response
     {
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
 
