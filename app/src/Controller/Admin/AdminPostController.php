@@ -5,6 +5,9 @@ namespace App\Controller\Admin;
 
 
 use App\Entity\Post;
+use App\Form\PostType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -35,4 +38,52 @@ class AdminPostController extends AdminBaseController
         $forRender['post'] = $post[0];
         return $this->render('admin/post/post.html.twig', $forRender);
     }
+
+	/**
+	 * @Route("/admin/posts/create", name="admin/posts/create")
+	 * @param Request $request
+	 * @return RedirectResponse|Response
+	 */
+	public function create(Request $request)
+	{
+		$post = new Post();
+		$form = $this->createForm(PostType::class, $post);
+		$em = $this->getDoctrine()->getManager();
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid())
+		{
+			$post->setCreatedAtValue();
+			$post->setUpdatedAtValue();
+			$post->setIsPublished();
+			$em->persist($post);
+			$em->flush();
+
+			$this->addFlash('success', 'Post was added.');
+
+			return $this->redirectToRoute('admin/posts_list');
+		}
+
+		$forRender = parent::renderDefault();
+		$forRender['title'] = 'Create post';
+		$forRender['form'] = $form->createView();
+
+		return $this->render('admin/post/form.html.twig', $forRender);
+	}
+
+	/**
+	 * @Route("/admin/post/delete/{id}", name="admin/post_delete", requirements={"id"="\d+"})
+	 */
+	public function delete(Post $post)
+	{
+		if (!$post) {
+			throw $this->createNotFoundException('No post found');
+		}
+		$em = $this->getDoctrine()->getManager();
+		$em->remove($post);
+		$em->flush();
+
+		$this->addFlash('success', 'Post was removed.');
+		return $this->redirectToRoute('admin/posts_list');
+	}
 }

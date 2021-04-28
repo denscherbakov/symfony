@@ -52,6 +52,11 @@ class Post
      */
     private $is_published;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class)
+     */
+    private $category;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,7 +112,7 @@ class Post
 
 	public function setCreatedAtValue()
 	{
-		$this->created_at = new \DateTime();
+	    $this->created_at = new \DateTime();
 	}
 
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -123,9 +128,9 @@ class Post
     }
 
 	public function setUpdatedAtValue()
-	{
-		$this->updated_at = new \DateTime();
-	}
+    {
+        $this->updated_at = new \DateTime();
+    }
 
     public function getIsPublished(): ?bool
     {
@@ -140,7 +145,19 @@ class Post
     }
 
 	public function setIsNotPublished(): self
-	{
-		$this->is_published = self::NOT_PUBLISHED;
-	}
+         	{
+         		$this->is_published = self::NOT_PUBLISHED;
+         	}
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
 }
