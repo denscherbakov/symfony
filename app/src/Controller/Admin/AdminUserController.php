@@ -3,6 +3,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Post;
 use App\Entity\User;
 use App\Form\UserType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -55,6 +56,50 @@ class AdminUserController extends AdminBaseController
         $forRender['form'] = $form->createView();
 
         return $this->render('admin/user/form.html.twig', $forRender);
+    }
 
+    /**
+     * @Route("/admin/user/delete/{id}", name="admin/user_delete", requirements={"id"="\d+"})
+     */
+    public function delete(User $user): RedirectResponse
+    {
+        if (!$user) {
+            throw $this->createNotFoundException('No user found');
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($user);
+        $em->flush();
+
+        $this->addFlash('success', 'User was removed.');
+        return $this->redirectToRoute('admin/users_list');
+    }
+
+    /**
+     * @Route("/admin/user/update/{id}", name="admin/user_update", requirements={"id"="\d+"})
+     */
+    public function update(int $id, Request $request): Response
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+
+        $form = $this->createForm(UserType::class, $user);
+        $em = $this->getDoctrine()->getManager();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash('success', 'User was updated.');
+
+            return $this->redirectToRoute('admin/users_list');
+        }
+
+        $forRender = parent::renderDefault();
+        $forRender['title'] = 'Create user';
+        $forRender['form'] = $form->createView();
+        $forRender['user'] = $user;
+
+        return $this->render('admin/user/form.html.twig', $forRender);
     }
 }

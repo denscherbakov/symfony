@@ -45,7 +45,7 @@ class AdminPostController extends AdminBaseController
 	 * @return RedirectResponse|Response
 	 */
 	public function create(Request $request)
-	{
+    {
 		$post = new Post();
 		$form = $this->createForm(PostType::class, $post);
 		$em = $this->getDoctrine()->getManager();
@@ -74,8 +74,8 @@ class AdminPostController extends AdminBaseController
 	/**
 	 * @Route("/admin/post/delete/{id}", name="admin/post_delete", requirements={"id"="\d+"})
 	 */
-	public function delete(Post $post)
-	{
+	public function delete(Post $post): RedirectResponse
+    {
 		if (!$post) {
 			throw $this->createNotFoundException('No post found');
 		}
