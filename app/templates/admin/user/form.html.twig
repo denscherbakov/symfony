@@ -2,8 +2,20 @@
 
 {% block body %}
 
-    <h1>{{ title }}</h1>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-10 offset-sm-1 mt-4 mb-4">
+                <h1>{{ title }}</h1>
+            </div>
+        </div>
+    </div>
 
-    {{ form(form) }}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-10 offset-sm-1">
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

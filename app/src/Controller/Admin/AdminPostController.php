@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Post;
 use App\Form\PostType;
+use App\Service\FileManagerServiceInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,9 +43,10 @@ class AdminPostController extends AdminBaseController
 	/**
 	 * @Route("/admin/posts/create", name="admin/posts/create")
 	 * @param Request $request
+	 * @param FileManagerServiceInterface $fileManagerService
 	 * @return RedirectResponse|Response
 	 */
-	public function create(Request $request)
+	public function create(Request $request, FileManagerServiceInterface $fileManagerService)
     {
 		$post = new Post();
 		$form = $this->createForm(PostType::class, $post);
@@ -53,6 +55,13 @@ class AdminPostController extends AdminBaseController
 
 		if ($form->isSubmitted() && $form->isValid())
 		{
+			$image = $form->get('image')->getData();
+
+			if ($image){
+				$fileName = $fileManagerService->imagePostUpload($image);
+				$post->setImage($fileName);
+			}
+
 			$post->setCreatedAtValue();
 			$post->setUpdatedAtValue();
 			$post->setIsPublished();
@@ -74,11 +83,16 @@ class AdminPostController extends AdminBaseController
 	/**
 	 * @Route("/admin/post/delete/{id}", name="admin/post_delete", requirements={"id"="\d+"})
 	 */
-	public function delete(Post $post): RedirectResponse
+	public function delete(Post $post, FileManagerServiceInterface $fileManagerService): RedirectResponse
     {
 		if (!$post) {
 			throw $this->createNotFoundException('No post found');
 		}
+
+	    if ($post->getImage()){
+		    $fileManagerService->removePostImage($post->getImage());
+	    }
+
 		$em = $this->getDoctrine()->getManager();
 		$em->remove($post);
 		$em->flush();
