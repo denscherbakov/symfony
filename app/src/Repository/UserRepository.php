@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -15,12 +17,27 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, UserRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, User::class);
-    }
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private  EntityManagerInterface $manager;
+
+	/**
+	 * @var UserPasswordEncoderInterface
+	 */
+	private  UserPasswordEncoderInterface $passwordEncoder;
+
+	public function __construct(ManagerRegistry $registry,
+	                            EntityManagerInterface $manager,
+	                            UserPasswordEncoderInterface $passwordEncoder)
+	{
+		parent::__construct($registry, User::class);
+
+		$this->manager = $manager;
+		$this->passwordEncoder = $passwordEncoder;
+	}
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
@@ -32,36 +49,34 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         $user->setPassword($newEncodedPassword);
-        $this->_em->persist($user);
-        $this->_em->flush();
+        $this->manager->persist($user);
+        $this->manager->flush();
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+	public function getAll(): array
+	{
+		return parent::findAll();
+	}
 
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+	public function getOne(int $id): object
+	{
+		return parent::find($id);
+	}
+
+	public function setCreateOrUpdate(User $user): object
+	{
+		$password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
+		$user->setPassword($password);
+		$user->setRoles(['ROLE_ADMIN']);
+		$this->manager->persist($user);
+		$this->manager->flush();
+
+		return $user;
+	}
+
+	public function setDelete(User $user)
+	{
+		$this->manager->remove($user);
+		$this->manager->flush();
+	}
 }

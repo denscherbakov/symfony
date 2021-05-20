@@ -3,51 +3,54 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Post;
+
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminUserController extends AdminBaseController
 {
+	/**
+	 * @var UserRepositoryInterface
+	 */
+	private UserRepositoryInterface $userRepository;
+
+	public function __construct(UserRepositoryInterface $userRepository)
+	{
+		$this->userRepository = $userRepository;
+	}
+
     /**
      * @Route("/admin/users", name="admin/users_list")
      */
     public function index(): Response
     {
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
-
         $forRender = parent::renderDefault();
         $forRender['title'] = 'Users list';
-        $forRender['users'] = $users;
+        $forRender['users'] = $this->userRepository->getAll();;
         return $this->render('admin/user/index.html.twig', $forRender);
     }
 
     /**
      * @Route("/admin/users/create", name="admin/users/create")
      * @param Request $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return RedirectResponse|Response
      */
-    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function create(Request $request)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
-        $em = $this->getDoctrine()->getManager();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
-            $user->setRoles(['ROLE_ADMIN']);
-            $em->persist($user);
-            $em->flush();
+        	$this->userRepository->setCreateOrUpdate($user);
 
+	        $this->addFlash('success', 'User was added.');
             return $this->redirectToRoute('admin/users_list');
         }
 
@@ -66,9 +69,8 @@ class AdminUserController extends AdminBaseController
         if (!$user) {
             throw $this->createNotFoundException('No user found');
         }
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($user);
-        $em->flush();
+
+        $this->userRepository->setDelete($user);
 
         $this->addFlash('success', 'User was removed.');
         return $this->redirectToRoute('admin/users_list');
@@ -79,24 +81,21 @@ class AdminUserController extends AdminBaseController
      */
     public function update(int $id, Request $request): Response
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $user = $this->userRepository->getOne($id);
 
         $form = $this->createForm(UserType::class, $user);
-        $em = $this->getDoctrine()->getManager();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $em->persist($user);
-            $em->flush();
+            $this->userRepository->setCreateOrUpdate($user);
 
             $this->addFlash('success', 'User was updated.');
-
             return $this->redirectToRoute('admin/users_list');
         }
 
         $forRender = parent::renderDefault();
-        $forRender['title'] = 'Create user';
+        $forRender['title'] = 'Update user';
         $forRender['form'] = $form->createView();
         $forRender['user'] = $user;
 
