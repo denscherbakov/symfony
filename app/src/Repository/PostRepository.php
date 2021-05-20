@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)
  * @method Post|null findOneBy(array $criteria, array $orderBy = null)
- * @method Post[]    findAll()
- * @method Post[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @psalm-method list<Post> findAll()
+ * @psalm-method list<Post> findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class PostRepository extends ServiceEntityRepository implements PostRepositoryInterface
 {
@@ -47,9 +47,9 @@ class PostRepository extends ServiceEntityRepository implements PostRepositoryIn
 		return parent::find($id);
 	}
 
-	public function setCreate(Post $post, UploadedFile $image): object
+	public function setCreate(Post $post, UploadedFile $image = null): object
 	{
-		if ($image){
+		if (!is_null($image)){
 			$fileName = $this->fileManagerService->imagePostUpload($image);
 			$post->setImage($fileName);
 		}
@@ -63,9 +63,9 @@ class PostRepository extends ServiceEntityRepository implements PostRepositoryIn
 		return $post;
 	}
 
-	public function setDelete(Post $post)
+	public function setDelete(Post $post): void
 	{
-		if ($post->getImage()){
+		if (!is_null($post->getImage())){
 			$this->fileManagerService->removePostImage($post->getImage());
 		}
 

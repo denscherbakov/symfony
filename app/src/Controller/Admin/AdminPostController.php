@@ -7,6 +7,7 @@ namespace App\Controller\Admin;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\PostRepositoryInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,13 +39,13 @@ class AdminPostController extends AdminBaseController
     /**
      * @Route("/admin/posts/{id}", name="admin/post_one", requirements={"id"="\d+"})
      */
-    public function readOne($id): Response
+    public function readOne(int $id): Response
     {
         $post = $this->postRepository->getOne($id);
 
         $forRender = parent::renderDefault();
-        $forRender['title'] = $post[0]->getTitle();
-        $forRender['post'] = $post[0];
+        $forRender['title'] = $post->getTitle();
+        $forRender['post'] = $post;
         return $this->render('admin/post/post.html.twig', $forRender);
     }
 
@@ -80,10 +81,6 @@ class AdminPostController extends AdminBaseController
 	 */
 	public function delete(Post $post): RedirectResponse
     {
-		if (!$post) {
-			throw $this->createNotFoundException('No post found');
-		}
-
 	    $this->postRepository->setDelete($post);
 
 		$this->addFlash('success', 'Post was removed.');

@@ -5,6 +5,7 @@ namespace App\Repository;
 
 
 use App\Entity\Category;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface CategoryRepositoryInterface
 {
@@ -21,12 +22,13 @@ interface CategoryRepositoryInterface
 
 	/**
 	 * @param Category $category
+	 * @param UploadedFile|null $image
 	 * @return Category
 	 */
-	public function setCreate(Category $category): object;
+	public function setCreate(Category $category, UploadedFile $image = null): object;
 
 	/**
 	 * @param Category $category
 	 */
-	public function setDelete(Category $category);
+	public function setDelete(Category $category): void;
 }

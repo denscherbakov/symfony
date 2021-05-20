@@ -24,13 +24,13 @@ class PostController extends BaseController
 	/**
 	 * @Route("/post/{id}", name="post_one", requirements={"id"="\d+"})
 	 */
-	public function readOne($id): Response
+	public function readOne(int $id): Response
 	{
 		$post = $this->postRepository->getOne($id);
 
 		$forRender = parent::renderDefault();
-		$forRender['title'] = $post[0]->getTitle();
-		$forRender['post'] = $post[0];
+		$forRender['title'] = $post->getTitle();
+		$forRender['post'] = $post;
 		return $this->render('main/post/post.html.twig', $forRender);
 	}
 

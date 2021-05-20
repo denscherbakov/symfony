@@ -10,11 +10,24 @@ use Cocur\Slugify\SlugifyInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Faker\Generator;
 
+/**
+ * Class CategoryFixtures
+ * @package App\DataFixtures
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 class CategoryFixtures extends Fixture
 {
-	private \Faker\Generator $faker;
-	private Slugify $slug;
+	/**
+	 * @var Generator
+	 */
+	private Generator $faker;
+
+	/**
+	 * @var SlugifyInterface
+	 */
+	private SlugifyInterface $slug;
 
 	public function __construct(SlugifyInterface $slug)
 	{
@@ -22,7 +35,7 @@ class CategoryFixtures extends Fixture
 		$this->slug = $slug;
 	}
 
-	public function load(ObjectManager $manager)
+	public function load(ObjectManager $manager): void
 	{
 		for ($i = 0; $i < 20; $i++) {
 
@@ -45,7 +58,7 @@ class CategoryFixtures extends Fixture
 	 * @param bool $randomize
 	 * @return string
 	 */
-	private static function imageUrl($width = 640, $height = 480, $randomize = true): string
+	private static function imageUrl(int $width = 640, int $height = 480, bool $randomize = true): string
 	{
 		$baseUrl = "https://via.placeholder.com/";
 		$url = "{$width}x{$height}/";

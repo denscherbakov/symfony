@@ -8,54 +8,55 @@ use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransfo
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
+ * @psalm-suppress MissingConstructor
  */
 class Post
 {
-	private const PUBLISHED = 1;
+	private const PUBLISHED = true;
 
-	private const NOT_PUBLISHED = 0;
+	private const NOT_PUBLISHED = false;
 
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=1000)
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(type="string", length=1000)
      */
-    private $content;
+    private string $content;
 
     /**
      * @ORM\Column(type="string", length=500, nullable=true)
      */
-    private $image;
+    private string $image;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $created_at;
+    private \DateTimeInterface $created_at;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $updated_at;
+    private \DateTimeInterface $updated_at;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $is_published;
+    private bool $is_published;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class)
      */
-    private $category;
+    private Category $category;
 
     public function getId(): ?int
     {
@@ -86,12 +87,12 @@ class Post
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getImage(): string
     {
         return $this->image;
     }
 
-    public function setImage(?string $image): self
+    public function setImage(string $image): self
     {
         $this->image = $image;
 
@@ -110,9 +111,11 @@ class Post
         return $this;
     }
 
-	public function setCreatedAtValue()
+	public function setCreatedAtValue(): self
 	{
 	    $this->created_at = new \DateTime();
+
+		return $this;
 	}
 
     public function getUpdatedAt(): ?\DateTimeInterface
@@ -127,9 +130,11 @@ class Post
         return $this;
     }
 
-	public function setUpdatedAtValue()
+	public function setUpdatedAtValue(): self
     {
         $this->updated_at = new \DateTime();
+
+        return $this;
     }
 
     public function getIsPublished(): ?bool
@@ -145,16 +150,18 @@ class Post
     }
 
 	public function setIsNotPublished(): self
-         	{
-         		$this->is_published = self::NOT_PUBLISHED;
-         	}
+    {
+        $this->is_published = self::NOT_PUBLISHED;
+
+        return $this;
+    }
 
     public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(?Category $category): self
+    public function setCategory(Category $category): self
     {
         $this->category = $category;
 

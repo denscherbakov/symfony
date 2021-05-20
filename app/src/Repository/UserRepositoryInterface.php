@@ -28,5 +28,5 @@ interface UserRepositoryInterface
 	/**
 	 * @param User $user
 	 */
-	public function setDelete(User $user);
+	public function setDelete(User $user): void;
 }

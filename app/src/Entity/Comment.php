@@ -7,45 +7,46 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
+ * @psalm-suppress MissingConstructor
  */
 class Comment
 {
-	private const PUBLISHED = 1;
+	private const PUBLISHED = true;
 
-	private const NOT_PUBLISHED = 0;
+	private const NOT_PUBLISHED = false;
 
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $content;
+    private string $content;
 
     /**
      * @ORM\ManyToOne(targetEntity=Post::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $post;
+    private self $post;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $created_at;
+    private \DateTimeInterface $created_at;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $updated_at;
+    private \DateTimeInterface $updated_at;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $is_published;
+    private bool $is_published;
 
     public function getId(): ?int
     {
@@ -64,12 +65,12 @@ class Comment
         return $this;
     }
 
-    public function getPost(): ?Post
+    public function getPost(): self
     {
         return $this->post;
     }
 
-    public function setPost(?Post $post): self
+    public function setPost(self $post): self
     {
         $this->post = $post;
 
@@ -108,10 +109,28 @@ class Comment
 	public function setIsPublished(): self
 	{
 		$this->is_published = self::PUBLISHED;
+
+		return $this;
 	}
 
 	public function setIsNotPublished(): self
 	{
 		$this->is_published = self::NOT_PUBLISHED;
+
+		return $this;
+	}
+
+	public function setUpdatedAtValue(): self
+	{
+		$this->updated_at = new \DateTime();
+
+		return $this;
+	}
+
+	public function setCreatedAtValue(): self
+	{
+		$this->created_at = new \DateTime();
+
+		return $this;
 	}
 }

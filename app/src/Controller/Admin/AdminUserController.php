@@ -66,10 +66,6 @@ class AdminUserController extends AdminBaseController
      */
     public function delete(User $user): RedirectResponse
     {
-        if (!$user) {
-            throw $this->createNotFoundException('No user found');
-        }
-
         $this->userRepository->setDelete($user);
 
         $this->addFlash('success', 'User was removed.');

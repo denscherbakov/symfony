@@ -10,6 +10,11 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
+/**
+ * Class UserFixtures
+ * @package App\DataFixtures
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 class UserFixtures extends Fixture
 {
     private EncoderFactoryInterface $encoderFactory;
@@ -22,7 +27,7 @@ class UserFixtures extends Fixture
         $this->faker = Factory::create();
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $this->createMainUser($manager);
 
@@ -40,7 +45,7 @@ class UserFixtures extends Fixture
         $manager->flush();
     }
 
-    private function createMainUser(ObjectManager $manager)
+    private function createMainUser(ObjectManager $manager): void
     {
         $user = new User();
         $user->setEmail('denscherbakov@yandex.ru');

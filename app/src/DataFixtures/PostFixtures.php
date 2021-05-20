@@ -9,6 +9,11 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
+/**
+ * Class PostFixtures
+ * @package App\DataFixtures
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 class PostFixtures extends Fixture
 {
     private \Faker\Generator $faker;
@@ -18,7 +23,7 @@ class PostFixtures extends Fixture
         $this->faker = Factory::create();
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         for ($i = 0; $i < 20; $i++) {
 
@@ -42,7 +47,7 @@ class PostFixtures extends Fixture
      * @param bool $randomize
      * @return string
      */
-    private static function imageUrl($width = 640, $height = 480, $randomize = true): string
+    private static function imageUrl(int $width = 640, int $height = 480, bool $randomize = true): string
     {
         $baseUrl = "https://via.placeholder.com/";
         $url = "{$width}x{$height}/";

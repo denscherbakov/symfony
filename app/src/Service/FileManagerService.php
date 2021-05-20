@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileManagerService implements FileManagerServiceInterface
 {
-	private $postImageDirectory;
+	private string $postImageDirectory;
 
-	public function __construct($postImageDirectory)
+	public function __construct(string $postImageDirectory)
 	{
 		$this->postImageDirectory = $postImageDirectory;
 	}
@@ -27,10 +27,9 @@ class FileManagerService implements FileManagerServiceInterface
 		$fileName = $this->getFileName($file);
 
 		try {
-
 			$file->move($this->getPostImageDirectory(), $fileName);
 		} catch (FileException $exception){
-			return $exception;
+			return $exception->getMessage();
 		}
 
 		return $fileName;

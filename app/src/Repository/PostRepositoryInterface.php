@@ -22,13 +22,13 @@ interface PostRepositoryInterface
 
 	/**
 	 * @param Post $post
-	 * @param UploadedFile $image
+	 * @param null|UploadedFile $image
 	 * @return Post
 	 */
-	public function setCreate(Post $post, UploadedFile $image): object;
+	public function setCreate(Post $post, UploadedFile $image = null): object;
 
 	/**
 	 * @param Post $post
 	 */
-	public function setDelete(Post $post);
+	public function setDelete(Post $post): void;
 }
