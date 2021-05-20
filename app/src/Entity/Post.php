@@ -12,9 +12,9 @@ use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransfo
  */
 class Post
 {
-	private const PUBLISHED = true;
+    private const PUBLISHED = true;
 
-	private const NOT_PUBLISHED = false;
+    private const NOT_PUBLISHED = false;
 
     /**
      * @ORM\Id
@@ -111,12 +111,12 @@ class Post
         return $this;
     }
 
-	public function setCreatedAtValue(): self
-	{
-	    $this->created_at = new \DateTime();
+    public function setCreatedAtValue(): self
+    {
+        $this->created_at = new \DateTime();
 
-		return $this;
-	}
+        return $this;
+    }
 
     public function getUpdatedAt(): ?\DateTimeInterface
     {
@@ -130,7 +130,7 @@ class Post
         return $this;
     }
 
-	public function setUpdatedAtValue(): self
+    public function setUpdatedAtValue(): self
     {
         $this->updated_at = new \DateTime();
 
@@ -149,7 +149,7 @@ class Post
         return $this;
     }
 
-	public function setIsNotPublished(): self
+    public function setIsNotPublished(): self
     {
         $this->is_published = self::NOT_PUBLISHED;
 

@@ -108,17 +108,17 @@ class Category
         return $this;
     }
 
-	public function setUpdatedAtValue(): self
-	{
-		$this->updated_at = new \DateTime();
+    public function setUpdatedAtValue(): self
+    {
+        $this->updated_at = new \DateTime();
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setCreatedAtValue(): self
-	{
-		$this->created_at = new \DateTime();
+    public function setCreatedAtValue(): self
+    {
+        $this->created_at = new \DateTime();
 
-		return $this;
-	}
+        return $this;
+    }
 }

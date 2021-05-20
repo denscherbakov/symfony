@@ -17,23 +17,23 @@ class PostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-	        ->add('image', FileType::class, [
-		        'label' => 'Load image',
-		        'required' => false,
-		        'mapped' => false,
-	        ])
-	        ->add('category', EntityType::class, [
-		        'label' => 'Select category',
-		        'class' => Category::class,
-		        'choice_label' => 'title'
-	        ])
+            ->add('image', FileType::class, [
+                'label' => 'Load image',
+                'required' => false,
+                'mapped' => false,
+            ])
+            ->add('category', EntityType::class, [
+                'label' => 'Select category',
+                'class' => Category::class,
+                'choice_label' => 'title'
+            ])
             ->add('title')
             ->add('content', TextareaType::class, [
-	            'label' => 'Description'
+                'label' => 'Description'
              ])
-	        ->add('save', SubmitType::class, [
-		        'label' => 'Save'
-	        ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Save'
+            ])
         ;
     }
 

@@ -17,59 +17,60 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class PostRepository extends ServiceEntityRepository implements PostRepositoryInterface
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private  EntityManagerInterface $manager;
+    /**
+     * @var EntityManagerInterface
+     */
+    private EntityManagerInterface $manager;
 
-	/**
-	 * @var FileManagerServiceInterface
-	 */
-	private  FileManagerServiceInterface $fileManagerService;
+    /**
+     * @var FileManagerServiceInterface
+     */
+    private FileManagerServiceInterface $fileManagerService;
 
-    public function __construct(ManagerRegistry $registry,
-                                EntityManagerInterface $manager,
-                                FileManagerServiceInterface $fileManagerService)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        EntityManagerInterface $manager,
+        FileManagerServiceInterface $fileManagerService
+    ) {
         parent::__construct($registry, Post::class);
 
         $this->manager = $manager;
         $this->fileManagerService = $fileManagerService;
     }
 
-	public function getAll(): array
-	{
-		return parent::findAll();
-	}
+    public function getAll(): array
+    {
+        return parent::findAll();
+    }
 
-	public function getOne(int $id): object
-	{
-		return parent::find($id);
-	}
+    public function getOne(int $id): object
+    {
+        return parent::find($id);
+    }
 
-	public function setCreate(Post $post, UploadedFile $image = null): object
-	{
-		if (!is_null($image)){
-			$fileName = $this->fileManagerService->imagePostUpload($image);
-			$post->setImage($fileName);
-		}
+    public function setCreate(Post $post, UploadedFile $image = null): object
+    {
+        if (!is_null($image)) {
+            $fileName = $this->fileManagerService->imagePostUpload($image);
+            $post->setImage($fileName);
+        }
 
-		$post->setCreatedAtValue();
-		$post->setUpdatedAtValue();
-		$post->setIsPublished();
-		$this->manager->persist($post);
-		$this->manager->flush();
+        $post->setCreatedAtValue();
+        $post->setUpdatedAtValue();
+        $post->setIsPublished();
+        $this->manager->persist($post);
+        $this->manager->flush();
 
-		return $post;
-	}
+        return $post;
+    }
 
-	public function setDelete(Post $post): void
-	{
-		if (!is_null($post->getImage())){
-			$this->fileManagerService->removePostImage($post->getImage());
-		}
+    public function setDelete(Post $post): void
+    {
+        if (!is_null($post->getImage())) {
+            $this->fileManagerService->removePostImage($post->getImage());
+        }
 
-		$this->manager->remove($post);
-		$this->manager->flush();
-	}
+        $this->manager->remove($post);
+        $this->manager->flush();
+    }
 }

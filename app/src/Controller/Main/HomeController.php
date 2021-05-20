@@ -13,11 +13,11 @@ class HomeController extends BaseController
      */
     public function index(): Response
     {
-	    $posts = $this->getDoctrine()->getRepository(Post::class)->findBy(['is_published' => 1]);
+        $posts = $this->getDoctrine()->getRepository(Post::class)->findBy(['is_published' => 1]);
 
-	    $forRender = parent::renderDefault();
-	    $forRender['title'] = 'Posts list';
-	    $forRender['posts'] = $posts;
+        $forRender = parent::renderDefault();
+        $forRender['title'] = 'Posts list';
+        $forRender['posts'] = $posts;
 
         return $this->render('main/index.html.twig', $forRender);
     }

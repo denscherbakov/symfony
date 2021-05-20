@@ -11,9 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Comment
 {
-	private const PUBLISHED = true;
+    private const PUBLISHED = true;
 
-	private const NOT_PUBLISHED = false;
+    private const NOT_PUBLISHED = false;
 
     /**
      * @ORM\Id
@@ -106,31 +106,31 @@ class Comment
         return $this->is_published;
     }
 
-	public function setIsPublished(): self
-	{
-		$this->is_published = self::PUBLISHED;
+    public function setIsPublished(): self
+    {
+        $this->is_published = self::PUBLISHED;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setIsNotPublished(): self
-	{
-		$this->is_published = self::NOT_PUBLISHED;
+    public function setIsNotPublished(): self
+    {
+        $this->is_published = self::NOT_PUBLISHED;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setUpdatedAtValue(): self
-	{
-		$this->updated_at = new \DateTime();
+    public function setUpdatedAtValue(): self
+    {
+        $this->updated_at = new \DateTime();
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setCreatedAtValue(): self
-	{
-		$this->created_at = new \DateTime();
+    public function setCreatedAtValue(): self
+    {
+        $this->created_at = new \DateTime();
 
-		return $this;
-	}
+        return $this;
+    }
 }

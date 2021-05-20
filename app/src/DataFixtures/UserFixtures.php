@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\DataFixtures;
-
 
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -32,7 +30,6 @@ class UserFixtures extends Fixture
         $this->createMainUser($manager);
 
         for ($i = 0; $i < 20; $i++) {
-
             $user = new User();
             $user->setEmail($this->faker->email);
             $user->setRoles(['ROLE_ADMIN']);

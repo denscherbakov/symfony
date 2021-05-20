@@ -20,25 +20,26 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, UserRepositoryInterface
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private  EntityManagerInterface $manager;
+    /**
+     * @var EntityManagerInterface
+     */
+    private EntityManagerInterface $manager;
 
-	/**
-	 * @var UserPasswordEncoderInterface
-	 */
-	private  UserPasswordEncoderInterface $passwordEncoder;
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    private UserPasswordEncoderInterface $passwordEncoder;
 
-	public function __construct(ManagerRegistry $registry,
-	                            EntityManagerInterface $manager,
-	                            UserPasswordEncoderInterface $passwordEncoder)
-	{
-		parent::__construct($registry, User::class);
+    public function __construct(
+        ManagerRegistry $registry,
+        EntityManagerInterface $manager,
+        UserPasswordEncoderInterface $passwordEncoder
+    ) {
+        parent::__construct($registry, User::class);
 
-		$this->manager = $manager;
-		$this->passwordEncoder = $passwordEncoder;
-	}
+        $this->manager = $manager;
+        $this->passwordEncoder = $passwordEncoder;
+    }
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
@@ -54,30 +55,30 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->manager->flush();
     }
 
-	public function getAll(): array
-	{
-		return parent::findAll();
-	}
+    public function getAll(): array
+    {
+        return parent::findAll();
+    }
 
-	public function getOne(int $id): object
-	{
-		return parent::find($id);
-	}
+    public function getOne(int $id): object
+    {
+        return parent::find($id);
+    }
 
-	public function setCreateOrUpdate(User $user): object
-	{
-		$password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
-		$user->setPassword($password);
-		$user->setRoles(['ROLE_ADMIN']);
-		$this->manager->persist($user);
-		$this->manager->flush();
+    public function setCreateOrUpdate(User $user): object
+    {
+        $password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
+        $user->setPassword($password);
+        $user->setRoles(['ROLE_ADMIN']);
+        $this->manager->persist($user);
+        $this->manager->flush();
 
-		return $user;
-	}
+        return $user;
+    }
 
-	public function setDelete(User $user): void
-	{
-		$this->manager->remove($user);
-		$this->manager->flush();
-	}
+    public function setDelete(User $user): void
+    {
+        $this->manager->remove($user);
+        $this->manager->flush();
+    }
 }

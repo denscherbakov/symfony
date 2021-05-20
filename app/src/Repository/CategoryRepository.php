@@ -18,53 +18,54 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class CategoryRepository extends ServiceEntityRepository implements CategoryRepositoryInterface
 {
 
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private EntityManagerInterface $manager;
+    /**
+     * @var EntityManagerInterface
+     */
+    private EntityManagerInterface $manager;
 
-	/**
-	 * @var FileManagerServiceInterface
-	 */
-	private  FileManagerServiceInterface $fileManagerService;
+    /**
+     * @var FileManagerServiceInterface
+     */
+    private FileManagerServiceInterface $fileManagerService;
 
-    public function __construct(ManagerRegistry $registry,
-                                EntityManagerInterface $manager,
-                                FileManagerServiceInterface $fileManagerService)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        EntityManagerInterface $manager,
+        FileManagerServiceInterface $fileManagerService
+    ) {
         parent::__construct($registry, Category::class);
 
         $this->manager = $manager;
         $this->fileManagerService = $fileManagerService;
     }
 
-	public function getAll(): array
-	{
-		return parent::findAll();
-	}
+    public function getAll(): array
+    {
+        return parent::findAll();
+    }
 
-	public function getOne(int $id): object
-	{
-		return parent::find($id);
-	}
+    public function getOne(int $id): object
+    {
+        return parent::find($id);
+    }
 
-	public function setCreate(Category $category, UploadedFile $image = null): object
-	{
-		if (!is_null($image)){
-			$fileName = $this->fileManagerService->imagePostUpload($image);
-			$category->setImage($fileName);
-		}
+    public function setCreate(Category $category, UploadedFile $image = null): object
+    {
+        if (!is_null($image)) {
+            $fileName = $this->fileManagerService->imagePostUpload($image);
+            $category->setImage($fileName);
+        }
 
-		$category->setCreatedAtValue();
-		$category->setUpdatedAtValue();
-		$this->manager->persist($category);
-		$this->manager->flush();
+        $category->setCreatedAtValue();
+        $category->setUpdatedAtValue();
+        $this->manager->persist($category);
+        $this->manager->flush();
 
-		return $category;
-	}
+        return $category;
+    }
 
-	public function setDelete(Category $category): void
-	{
-		// TODO: Implement setDelete() method.
-	}
+    public function setDelete(Category $category): void
+    {
+        // TODO: Implement setDelete() method.
+    }
 }

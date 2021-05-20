@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Controller\Admin;
-
 
 use App\Entity\User;
 use App\Form\UserType;
@@ -14,15 +12,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminUserController extends AdminBaseController
 {
-	/**
-	 * @var UserRepositoryInterface
-	 */
-	private UserRepositoryInterface $userRepository;
+    /**
+     * @var UserRepositoryInterface
+     */
+    private UserRepositoryInterface $userRepository;
 
-	public function __construct(UserRepositoryInterface $userRepository)
-	{
-		$this->userRepository = $userRepository;
-	}
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
 
     /**
      * @Route("/admin/users", name="admin/users_list")
@@ -31,7 +29,8 @@ class AdminUserController extends AdminBaseController
     {
         $forRender = parent::renderDefault();
         $forRender['title'] = 'Users list';
-        $forRender['users'] = $this->userRepository->getAll();;
+        $forRender['users'] = $this->userRepository->getAll();
+        ;
         return $this->render('admin/user/index.html.twig', $forRender);
     }
 
@@ -46,11 +45,10 @@ class AdminUserController extends AdminBaseController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
-        	$this->userRepository->setCreateOrUpdate($user);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->userRepository->setCreateOrUpdate($user);
 
-	        $this->addFlash('success', 'User was added.');
+            $this->addFlash('success', 'User was added.');
             return $this->redirectToRoute('admin/users_list');
         }
 
@@ -82,8 +80,7 @@ class AdminUserController extends AdminBaseController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->userRepository->setCreateOrUpdate($user);
 
             $this->addFlash('success', 'User was updated.');

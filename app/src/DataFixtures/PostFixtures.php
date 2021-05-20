@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\DataFixtures;
-
 
 use App\Entity\Post;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -26,7 +24,6 @@ class PostFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         for ($i = 0; $i < 20; $i++) {
-
             $post = new Post();
             $post->setTitle($this->faker->text(15));
             $post->setContent($this->faker->text(200));
