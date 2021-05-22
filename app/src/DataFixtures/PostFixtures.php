@@ -46,7 +46,7 @@ class PostFixtures extends Fixture
      */
     private static function imageUrl(int $width = 640, int $height = 480, bool $randomize = true): string
     {
-        $baseUrl = "https://via.placeholder.com/";
+        $baseUrl = 'https://via.placeholder.com/';
         $url = "{$width}x{$height}/";
 
         if ($randomize) {

@@ -8,14 +8,26 @@
     "cocur/slugify": {
         "version": "v4.0.0"
     },
+    "composer/ca-bundle": {
+        "version": "1.2.9"
+    },
+    "composer/composer": {
+        "version": "1.10.22"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.1"
     },
     "composer/semver": {
         "version": "3.2.4"
     },
+    "composer/spdx-licenses": {
+        "version": "1.5.5"
+    },
     "composer/xdebug-handler": {
         "version": "2.0.1"
+    },
+    "dealerdirect/phpcodesniffer-composer-installer": {
+        "version": "v0.7.1"
     },
     "dnoegel/php-xdg-base-dir": {
         "version": "v0.1.1"
@@ -124,11 +136,26 @@
     "felixfbecker/language-server-protocol": {
         "version": "1.5.1"
     },
+    "friendsofphp/php-cs-fixer": {
+        "version": "2.19",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.19",
+            "ref": "34d1a22f840953909c581b8f993093b14cc9491b"
+        },
+        "files": [
+            ".php-cs-fixer.dist.php"
+        ]
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
     },
     "fzaninotto/faker": {
         "version": "v1.9.2"
+    },
+    "justinrainbow/json-schema": {
+        "version": "5.2.10"
     },
     "laminas/laminas-code": {
         "version": "4.2.0"
@@ -139,17 +166,32 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.2.0"
     },
+    "league/container": {
+        "version": "3.3.5"
+    },
     "monolog/monolog": {
         "version": "2.2.0"
     },
     "netresearch/jsonmapper": {
         "version": "v2.1.0"
     },
+    "nette/utils": {
+        "version": "v3.2.2"
+    },
     "nikic/php-parser": {
         "version": "v4.10.4"
     },
+    "nunomaduro/phpinsights": {
+        "version": "v1.14.1"
+    },
+    "object-calisthenics/phpcs-calisthenics-rules": {
+        "version": "v3.9.1"
+    },
     "openlss/lib-array2xml": {
         "version": "1.0.0"
+    },
+    "php-cs-fixer/diff": {
+        "version": "v1.3.1"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -159,6 +201,12 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "1.4.0"
+    },
+    "phploc/phploc": {
+        "version": "6.0.2"
+    },
+    "phpstan/phpdoc-parser": {
+        "version": "0.4.9"
     },
     "psalm/plugin-symfony": {
         "version": "v2.3.0"
@@ -181,6 +229,18 @@
     "sebastian/diff": {
         "version": "4.0.4"
     },
+    "sebastian/finder-facade": {
+        "version": "2.0.0"
+    },
+    "sebastian/version": {
+        "version": "3.0.2"
+    },
+    "seld/jsonlint": {
+        "version": "1.8.3"
+    },
+    "seld/phar-utils": {
+        "version": "1.1.1"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -192,6 +252,9 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "slevomat/coding-standard": {
+        "version": "6.4.1"
     },
     "squizlabs/php_codesniffer": {
         "version": "3.6",
@@ -423,6 +486,9 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.22.1"
     },
+    "symfony/polyfill-php70": {
+        "version": "v1.20.0"
+    },
     "symfony/polyfill-php73": {
         "version": "v1.22.1"
     },
@@ -574,6 +640,9 @@
     },
     "symfony/yaml": {
         "version": "v5.2.5"
+    },
+    "theseer/fdomdocument": {
+        "version": "1.6.6"
     },
     "twig/extra-bundle": {
         "version": "v3.3.0"
