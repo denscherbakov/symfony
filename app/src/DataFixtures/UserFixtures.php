@@ -32,7 +32,10 @@ class UserFixtures extends Fixture
         for ($i = 0; $i < 20; $i++) {
             $user = new User();
             $user->setEmail($this->faker->email);
-            $user->setRoles(['ROLE_ADMIN']);
+            $user->setName($this->faker->firstName);
+            $user->setPhone($this->faker->phoneNumber);
+            $user->setStatus(2);
+            $user->setRoles([User::ROLE_USER]);
 
             $user->setPassword($this->encoderFactory->getEncoder(User::class)->encodePassword('1234', null));
 
@@ -46,7 +49,10 @@ class UserFixtures extends Fixture
     {
         $user = new User();
         $user->setEmail('denscherbakov@yandex.ru');
-        $user->setRoles(['ROLE_ADMIN']);
+        $user->setName('Denis');
+        $user->setPhone('+79231111111');
+        $user->setStatus(1);
+        $user->setRoles([User::ROLE_ADMIN]);
 
         $user->setPassword($this->encoderFactory->getEncoder(User::class)->encodePassword('1234', null));
 
