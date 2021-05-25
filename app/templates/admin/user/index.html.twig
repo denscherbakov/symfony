@@ -21,6 +21,9 @@
                     <tr>
                         <td>ID</td>
                         <td>Email</td>
+                        <td>Name</td>
+                        <td>Phone</td>
+                        <td>Status</td>
                         <td>Roles</td>
                         <td>Edit</td>
                         <td>Delete</td>
@@ -29,6 +32,9 @@
                         <tr>
                             <td>{{ user.id }}</td>
                             <td>{{ user.email }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.phone }}</td>
+                            <td>{{ user.status }}</td>
                             <td>{{ user.roles | json_encode }}</td>
                             <td><a href="{{ path('admin/user_update', {'id': user.id}) }}"><span class="fa fa-edit" style="color: black"></span></a></td>
                             <td><a href="{{ path('admin/user_delete', {'id': user.id}) }}"><span class="fa fa-remove" style="color: darkred"></span></a></td>

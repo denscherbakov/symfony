@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -71,10 +73,24 @@ class User implements UserInterface
      */
     private string $plainPassword;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Address::class, inversedBy="user")
+     * @ORM\JoinTable(name="user_to_address")
+     */
+    private Collection $addresses;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Shop::class, inversedBy="user")
+     * @ORM\JoinTable(name="user_to_shop")
+     */
+    private Collection $shops;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
+        $this->addresses = new ArrayCollection();
+        $this->shops = new ArrayCollection();
     }
 
     /**
@@ -95,7 +111,7 @@ class User implements UserInterface
 
     /**
      * @param string $email
-     * @return User
+     * @return $this
      */
     public function setEmail(string $email): self
     {
@@ -128,7 +144,7 @@ class User implements UserInterface
 
     /**
      * @param array $roles
-     * @return User
+     * @return $this
      */
     public function setRoles(array $roles): self
     {
@@ -147,7 +163,7 @@ class User implements UserInterface
 
     /**
      * @param string $password
-     * @return User
+     * @return $this
      */
     public function setPassword(string $password): self
     {
@@ -202,7 +218,7 @@ class User implements UserInterface
 
     /**
      * @param string $name
-     * @return User
+     * @return $this
      */
     public function setName(string $name): self
     {
@@ -221,7 +237,7 @@ class User implements UserInterface
 
     /**
      * @param string $phone
-     * @return User
+     * @return $this
      */
     public function setPhone(string $phone): self
     {
@@ -240,7 +256,7 @@ class User implements UserInterface
 
     /**
      * @param int $status
-     * @return User
+     * @return $this
      */
     public function setStatus(int $status): self
     {
@@ -259,7 +275,7 @@ class User implements UserInterface
 
     /**
      * @param DateTimeInterface $createdAt
-     * @return User
+     * @return $this
      */
     public function setCreatedAt(DateTimeInterface $createdAt): self
     {
@@ -278,11 +294,73 @@ class User implements UserInterface
 
     /**
      * @param DateTimeInterface $updatedAt
-     * @return User
+     * @return $this
      */
     public function setUpdatedAt(DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getAddresses(): Collection
+    {
+        return $this->addresses;
+    }
+
+	/**
+	 * @param Address $address
+	 * @return $this
+	 */
+    public function addAddress(Address $address): self
+    {
+        if (!$this->addresses->contains($address)) {
+            $this->addresses[] = $address;
+            $address->addUser($this);
+        }
+
+        return $this;
+    }
+
+	/**
+	 * @param Address $address
+	 * @return $this
+	 */
+    public function removeAddress(Address $address): self
+    {
+        if ($this->addresses->removeElement($address)) {
+            $address->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getShops(): Collection
+    {
+        return $this->shops;
+    }
+
+    public function addShop(Shop $shop): self
+    {
+        if (!$this->shops->contains($shop)) {
+            $this->shops[] = $shop;
+            $shop->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShop(Shop $shop): self
+    {
+        if ($this->shops->removeElement($shop)) {
+            $shop->removeUser($this);
+        }
 
         return $this;
     }
