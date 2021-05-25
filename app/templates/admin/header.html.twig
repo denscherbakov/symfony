@@ -1,0 +1,18 @@
+<meta charset="UTF-8">
+<title>{% block title %}Welcome!{% endblock %}</title>
+
+{% block stylesheets %}
+    {#{{ encore_entry_link_tags('app') }}#}
+    <link rel="stylesheet" href="{{ asset('assets/framework/bootstrap-4.6.0/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/framework/bootstrap-4.6.0/css/bootstrap-grid.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/framework/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/main/styles/style.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {#{{ encore_entry_script_tags('app') }}#}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    <script src="{{ asset('assets/framework/bootstrap-4.6.0/js/bootstrap.min.js') }}"></script>
+{% endblock %}
